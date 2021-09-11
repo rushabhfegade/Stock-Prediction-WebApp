@@ -1,0 +1,10 @@
+pandas
+numpy
+matplotlib
+streamlit
+yfinance
+statsmodels
+plotly
+ta
+pystan==2.19.1.1
+prophet
