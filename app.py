@@ -1,6 +1,7 @@
 # Import Libraries
 import pandas as pd
 import numpy as np
+from datetime import date
 import warnings
 import streamlit as st
 import yfinance as yf
@@ -22,7 +23,6 @@ ticker_symbol = st.sidebar.text_input('Input the Ticker Symbol for the Stock: ',
 if not ticker_symbol:
     st.sidebar.warning('Please input a Ticker Symbol.')
     st.stop()
-#st.sidebar.success('Thank you for inputting the Ticker Symbol.')
 
 # Create Yahoo finance Ticker object
 ticker = yf.Ticker(ticker_symbol)
@@ -62,7 +62,7 @@ else:
     data = ticker.history(period=period, interval=interval)
 
 # Display the plot of the Stock and it's Raw Data
-with st.beta_expander("{} Stock Information".format(company_name)):
+with st.expander("{} Stock Information".format(company_name)):
     
     plt_data.plot_rawdata(data, f"{company_name} Stock Prices")
     plt_data.plotly_candlestick(data, stock=f"{ticker_symbol} Stock Prices", title=f"Candlestick Chart of {company_name} Stock Prices")
@@ -71,7 +71,7 @@ with st.beta_expander("{} Stock Information".format(company_name)):
         info_options = ['Profile', 'Fundamental Information', 'General Stock Information', 'Market Information', 'Stock Prices Raw Data']
         info_selected = st.multiselect('Select required Information to be retrived',
                                         options=info_options)
-        col1, col2 = st.beta_columns(2)                                
+        col1, col2 = st.columns(2)                                
         with col1:
             submitted = st.form_submit_button("Retrieve selected Information")
         with col2:
@@ -158,6 +158,8 @@ if task == task_options[1]:
 else:
     algo = ('', 'AR', 'MA', 'ARMA', 'ARIMA', 'ARCH', 'GARCH', 'Linear Regression', 'Facebook Prophet', 'LTSM', 'Transfomer')
     selected_algo = st.sidebar.selectbox('Select the Time Series Algorithm to predict the stock prices', algo, index=0)
+
+    sp = Stock_Prediction(data, ticker_symbol, company_name)
     
     if selected_algo == algo[0]:
         st.sidebar.warning('Please select the Algorithm for prediction.')
@@ -177,8 +179,7 @@ else:
     elif selected_algo == algo[7]:
         pass
     elif selected_algo == algo[8]:
-        sp = Stock_Prediction(data, ticker_symbol, company_name)
-        sp.Prophet(period=period)
+        sp.Prophet()
     elif selected_algo == algo[9]:
         pass
     else:

@@ -5,7 +5,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-
 def plot_rawdata(data, title=None):
     df = data[['Open', 'High', 'Low', 'Close']]
     data_reset_index = df.reset_index()
